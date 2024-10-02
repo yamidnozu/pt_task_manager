@@ -15,7 +15,14 @@
       <div class="deadline">{{ task.deadLine | date:'dd/MM/yyyy' }}</div>
     </div>
     <div class="persons">
-      <!-- TODO: Mostrar personas asociadas -->
+      <h4>Personas Asociadas:</h4>
+      <ul>
+        <li *ngFor="let person of task.persons">
+          <span class="person-name">{{ person.fullName }}</span>
+          <span class="person-age">({{ person.age }} años)</span>
+          <div class="person-skills">Habilidades: {{ getSkills(person) }}</div>
+        </li>
+      </ul>
     </div>
   </div>
 </div>

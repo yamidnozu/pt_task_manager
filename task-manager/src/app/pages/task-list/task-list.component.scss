@@ -1,5 +1,3 @@
-/* src/app/pages/task-list/task-list.component.scss */
-
 .filters {
   display: flex;
   justify-content: center;
@@ -69,6 +67,42 @@
   color: #7f8c8d;
 }
 
+.persons {
+  margin-top: 1rem;
+}
+
+.persons h4 {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  color: var(--text-color);
+}
+
+.persons ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.persons li {
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}
+
+.person-name {
+  font-weight: bold;
+}
+
+.person-age {
+  font-style: italic;
+  color: #7f8c8d;
+  margin-left: 0.5rem;
+}
+
+.person-skills {
+  margin-top: 0.25rem;
+  font-size: 0.9rem;
+}
 
 @media (max-width: 768px) {
   .task-header {
