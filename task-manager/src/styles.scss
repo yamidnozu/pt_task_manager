@@ -1,4 +1,6 @@
+/* src/styles.css */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
 :root {
   --primary-color: #4b4b4b;
   --secondary-color: #8d8d8d;
@@ -29,6 +31,10 @@ body {
   margin: 0 auto;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+}
 
 button {
   cursor: pointer;
@@ -50,6 +56,20 @@ button:disabled {
   cursor: not-allowed;
 }
 
+input, select, textarea {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--card-border);
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.error-message {
+  color: var(--error-color);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
 
 @media (min-width: 768px) {
   .container {
