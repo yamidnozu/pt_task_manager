@@ -1,3 +1,4 @@
+// src/app/services/task.service.ts
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Task } from '../models/task.model';
@@ -6,7 +7,32 @@ import { Task } from '../models/task.model';
   providedIn: 'root',
 })
 export class TaskService {
-  private tasksSubject = new BehaviorSubject<Task[]>([]);
+  private tasksSubject = new BehaviorSubject<Task[]>([
+    {
+      id: 1,
+      name: 'Poner candado',
+      deadLine: new Date(),
+      completed: true,
+      persons: [
+        {
+          fullName: 'Luisa Pérez',
+          age: 25,
+          skills: [
+            { name: 'Organizar' },
+            { name: 'Trabajar' },
+          ],
+        },
+        {
+          fullName: 'Orlando Gómez',
+          age: 30,
+          skills: [
+            { name: 'Jugar' },
+            { name: 'Comprar y Comer' },
+          ],
+        },
+      ],
+    },
+  ]);
   tasks$ = this.tasksSubject.asObservable();
   private idCounter = 2;
 

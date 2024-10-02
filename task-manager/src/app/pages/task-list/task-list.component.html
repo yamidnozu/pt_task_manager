@@ -1,1 +1,21 @@
-<p>task-list works!</p>
+<div class="container">
+  <h2>Lista de Tareas</h2>
+  <div class="filters">
+    <button (click)="onFilterChange('all')" [class.active]="filter === 'all'">Todas</button>
+    <button (click)="onFilterChange('completed')" [class.active]="filter === 'completed'">Completadas</button>
+    <button (click)="onFilterChange('pending')" [class.active]="filter === 'pending'">Pendientes</button>
+  </div>
+
+  <div *ngFor="let task of filteredTasks" class="task-card">
+    <div class="task-header">
+      <div class="task-status">
+        <input type="checkbox" [checked]="task.completed" (change)="toggleTaskCompletion(task)" />
+        <h3 [ngClass]="task.completed ? 'completed' : 'pending'">{{ task.name }}</h3>
+      </div>
+      <div class="deadline">{{ task.deadLine | date:'dd/MM/yyyy' }}</div>
+    </div>
+    <div class="persons">
+      <!-- TODO: Mostrar personas asociadas -->
+    </div>
+  </div>
+</div>

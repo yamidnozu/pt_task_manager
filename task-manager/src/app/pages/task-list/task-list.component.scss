@@ -1,0 +1,90 @@
+/* src/app/pages/task-list/task-list.component.scss */
+
+.filters {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.filters button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #ecf0f1;
+  color: var(--text-color);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.filters button.active,
+.filters button:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.task-card {
+  background-color: var(--card-background);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.task-status {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.task-status input[type="checkbox"] {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: auto;
+}
+
+.task-status h3 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.completed {
+  text-decoration: line-through;
+  color: var(--secondary-color);
+}
+
+.pending {
+  color: var(--primary-color);
+}
+
+.deadline {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+}
+
+
+@media (max-width: 768px) {
+  .task-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .deadline {
+    margin-top: 0.5rem;
+  }
+
+  .filters {
+    flex-wrap: wrap;
+  }
+
+  .filters button {
+    flex: 1 0 30%;
+  }
+}
