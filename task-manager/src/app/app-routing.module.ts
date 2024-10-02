@@ -1,10 +1,9 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
+import { TaskCreateComponent } from './pages/task-create/task-create.component';
+import { TaskListComponent } from './pages/task-list/task-list.component';
 
-const routes: Routes = [];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
-})
-export class AppRoutingModule { }
+export const routes: Routes = [
+    { path: '', redirectTo: 'tasks', pathMatch: 'full' },
+    { path: 'tasks', component: TaskListComponent },
+    { path: 'create-task', component: TaskCreateComponent },
+];
