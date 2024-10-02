@@ -1,6 +1,16 @@
+// src/app/pages/task-create/task-create.component.ts
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, OnInit, inject } from '@angular/core';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+
+import { Skill } from '../../models/skill.model';
 
 interface SkillForm {
   name: FormControl<string>;
@@ -42,13 +52,27 @@ export class TaskCreateComponent implements OnInit {
       persons: this.fb.array<FormGroup<PersonForm>>([], [
         Validators.required,
         Validators.minLength(1),
-        // TODO: Agregar validacion para que este el nombre sea unico
+        this.uniquePersonNamesValidator.bind(this),
       ]),
     });
   }
 
+  get persons(): FormArray<FormGroup<PersonForm>> {
+    return this.taskForm.get('persons') as FormArray<FormGroup<PersonForm>>;
+  }
+  uniquePersonNamesValidator(formArray: FormArray<FormGroup<PersonForm>>): { [key: string]: any } | null {
+    const names = formArray.controls.map((ctrl) => ctrl.get('fullName')?.value.trim());
+    const duplicates = names.filter((name, index) => names.indexOf(name) !== index);
+    return duplicates.length > 0 ? { duplicateNames: true } : null;
+  }
+
   onSubmit(): void {
     // TODO: Validar formulario sea valido y guardar
+  }
+
+  resetForm(): void {
+    this.taskForm.reset();
+    this.persons.clear();
   }
 
 }

@@ -1,6 +1,61 @@
 <div class="container">
   <h2>Crear Nueva Tarea</h2>
   <form autocomplete="off" [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="task-form">
+    <div class="form-group">
+      <label for="taskName">Nombre de la tarea:</label>
+      <input id="taskName" formControlName="name" placeholder="Ingrese el nombre de la tarea" />
+      <div *ngIf="taskForm.get('name')?.invalid && taskForm.get('name')?.touched" class="error-message">
+        <small *ngIf="taskForm.get('name')?.errors?.['required']">❗El nombre es obligatorio.</small>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="taskDeadline">Fecha límite:</label>
+      <input id="taskDeadline" type="date" formControlName="deadline" autocomplete="off" />
+      <div *ngIf="taskForm.get('deadline')?.invalid && taskForm.get('deadline')?.touched" class="error-message">
+        <small *ngIf="taskForm.get('deadline')?.errors?.['required']">❗La fecha límite es obligatoria.</small>
+      </div>
+    </div>
 
+    <div formArrayName="persons" class="persons-section">
+      <h3>Personas Asociadas</h3>
+      <div *ngFor="let person of persons.controls; let i = index" [formGroupName]="i" class="person-card">
+        <div class="form-group">
+          <label [for]="'personName' + i">Nombre completo:</label>
+          <input [id]="'personName' + i" formControlName="fullName" placeholder="Ingrese el nombre completo" />
+          <div *ngIf="person.get('fullName')?.invalid && person.get('fullName')?.touched" class="error-message">
+            <small *ngIf="person.get('fullName')?.errors?.['required']">❗El nombre es obligatorio.</small>
+            <small *ngIf="person.get('fullName')?.errors?.['minlength']">
+              ❗Mínimo {{ person.get('fullName')?.errors?.['minlength'].requiredLength }} caracteres.
+            </small>
+            <small *ngIf="person.get('fullName')?.errors?.['duplicate']">❗El nombre ya está en uso.</small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label [for]="'personAge' + i">Edad:</label>
+          <input [id]="'personAge' + i" type="number" formControlName="age" placeholder="Ingrese la edad" />
+          <div *ngIf="person.get('age')?.invalid && person.get('age')?.touched" class="error-message">
+            <small *ngIf="person.get('age')?.errors?.['required']">❗La edad es obligatoria.</small>
+            <small *ngIf="person.get('age')?.errors?.['min']">
+              ❗Debe ser mayor a {{ person.get('age')?.errors?.['min'].min - 1 }} años.
+            </small>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div *ngIf="taskForm.get('persons')?.errors?.['duplicateNames'] && taskForm.get('persons')?.touched" class="error-message">
+        <small>❗Los nombres de las personas no pueden repetirse en la misma tarea.</small>
+      </div>
+      <div *ngIf="taskForm.get('persons')?.invalid && taskForm.get('persons')?.touched && !taskForm.get('persons')?.errors?.['duplicateNames']" class="error-message">
+        <small>❗Debe agregar al menos una persona.</small>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" [disabled]="taskForm.invalid">Guardar Tarea</button>
+      <button type="button" (click)="resetForm()" class="reset-button">Resetear Formulario</button>
+    </div>
   </form>
 </div>
