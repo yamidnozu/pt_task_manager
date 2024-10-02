@@ -8,6 +8,7 @@
         <small *ngIf="taskForm.get('name')?.errors?.['required']">❗El nombre es obligatorio.</small>
       </div>
     </div>
+
     <div class="form-group">
       <label for="taskDeadline">Fecha límite:</label>
       <input id="taskDeadline" type="date" formControlName="deadline" autocomplete="off" />
@@ -42,7 +43,22 @@
           </div>
         </div>
 
+        <div formArrayName="skills" class="skills-section">
+          <h4>Habilidades</h4>
+          <div *ngFor="let skill of getSkillsArray(i).controls; let j = index" [formGroupName]="j" class="skill-item">
+            <input formControlName="name" placeholder="Nombre de la habilidad" />
+            <button type="button" (click)="removeSkill(i, j)" class="remove-button">Eliminar</button>
+            <div *ngIf="skill.get('name')?.invalid && skill.get('name')?.touched" class="error-message">
+              <small *ngIf="skill.get('name')?.errors?.['required']">❗El nombre de la habilidad es obligatorio.</small>
+            </div>
+          </div>
+          <button type="button" (click)="addSkill(i)" class="add-button">Añadir Habilidad</button>
+          <div *ngIf="person.get('skills')?.invalid && person.get('skills')?.touched" class="error-message">
+            <small *ngIf="person.get('skills')?.errors?.['minSkills']">❗Debe agregar al menos una habilidad.</small>
+          </div>
+        </div>
 
+        <button type="button" (click)="removePerson(i)" class="remove-button">Eliminar Persona</button>
       </div>
 
       <div *ngIf="taskForm.get('persons')?.errors?.['duplicateNames'] && taskForm.get('persons')?.touched" class="error-message">
@@ -51,6 +67,8 @@
       <div *ngIf="taskForm.get('persons')?.invalid && taskForm.get('persons')?.touched && !taskForm.get('persons')?.errors?.['duplicateNames']" class="error-message">
         <small>❗Debe agregar al menos una persona.</small>
       </div>
+
+      <button type="button" (click)="addPerson()" class="add-button">Añadir Persona</button>
     </div>
 
     <div class="form-actions">

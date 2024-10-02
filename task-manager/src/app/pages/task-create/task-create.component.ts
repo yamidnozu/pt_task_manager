@@ -9,8 +9,12 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-
+import { Task } from 'src/app/models/task.model';
+import { Person } from '../../models/person.model';
 import { Skill } from '../../models/skill.model';
+import { PersonService } from '../../services/person.service';
+import { SkillService } from '../../services/skill.service';
+import { TaskService } from '../../services/task.service';
 
 interface SkillForm {
   name: FormControl<string>;
@@ -36,8 +40,13 @@ interface TaskForm {
   styleUrls: ['./task-create.component.scss']
 })
 export class TaskCreateComponent implements OnInit {
-  taskForm!: FormGroup<TaskForm>;
   private readonly fb = inject(FormBuilder);
+  private readonly taskService = inject(TaskService);
+  private readonly personService = inject(PersonService);
+  private readonly skillService = inject(SkillService);
+
+  taskForm!: FormGroup<TaskForm>;
+
 
   ngOnInit(): void {
     this.taskForm = this.fb.group<TaskForm>({
@@ -60,6 +69,57 @@ export class TaskCreateComponent implements OnInit {
   get persons(): FormArray<FormGroup<PersonForm>> {
     return this.taskForm.get('persons') as FormArray<FormGroup<PersonForm>>;
   }
+
+  addPerson(): void {
+    const existingNames = this.persons.controls.map((ctrl) => ctrl.get('fullName')?.value.trim());
+
+    const personGroup = this.fb.group<PersonForm>({
+      fullName: this.fb.control('', {
+        validators: [
+          this.personService.fullNameValidator(),
+          this.personService.uniqueFullNameValidator(existingNames as string[]),
+        ],
+        nonNullable: true,
+      }),
+      age: this.fb.control<number | null>(null, [this.personService.ageValidator()]),
+      skills: this.fb.array<FormGroup<SkillForm>>([], [
+        Validators.required,
+        Validators.minLength(1),
+        this.personService.skillsValidator(),
+      ]),
+    });
+
+    this.persons.push(personGroup);
+  }
+
+  removePerson(index: number): void {
+    this.persons.removeAt(index);
+    // Actualizar validación de nombres únicos
+    this.persons.controls.forEach((ctrl, i) => {
+      ctrl.get('fullName')?.updateValueAndValidity();
+    });
+  }
+
+  getSkillsArray(personIndex: number): FormArray<FormGroup<SkillForm>> {
+    return this.persons.at(personIndex).get('skills') as FormArray<FormGroup<SkillForm>>;
+  }
+
+  addSkill(personIndex: number): void {
+    const skills = this.getSkillsArray(personIndex);
+    const skillGroup = this.fb.group<SkillForm>({
+      name: this.fb.control('', {
+        validators: [this.skillService.skillNameValidator()],
+        nonNullable: true,
+      }),
+    });
+    skills.push(skillGroup);
+  }
+
+  removeSkill(personIndex: number, skillIndex: number): void {
+    const skills = this.getSkillsArray(personIndex);
+    skills.removeAt(skillIndex);
+  }
+
   uniquePersonNamesValidator(formArray: FormArray<FormGroup<PersonForm>>): { [key: string]: any } | null {
     const names = formArray.controls.map((ctrl) => ctrl.get('fullName')?.value.trim());
     const duplicates = names.filter((name, index) => names.indexOf(name) !== index);
@@ -67,12 +127,34 @@ export class TaskCreateComponent implements OnInit {
   }
 
   onSubmit(): void {
-    // TODO: Validar formulario sea valido y guardar
+    if (this.taskForm.valid) {
+      const taskValue = this.taskForm.value;
+
+      const task: Task = {
+        id: 0,
+        name: taskValue.name!,
+        deadLine: new Date(taskValue.deadline as string),
+        completed: false,
+        persons: taskValue.persons!.map((personGroup) => ({
+          fullName: personGroup.fullName!,
+          age: personGroup.age!,
+          skills: personGroup.skills!.map((skillGroup) => ({
+            name: skillGroup.name,
+          })) as Skill[],
+        })),
+      };
+
+      this.taskService.addTask(task);
+
+      // Reiniciar el formulario
+      this.resetForm();
+    } else {
+      this.taskForm.markAllAsTouched();
+    }
   }
 
   resetForm(): void {
     this.taskForm.reset();
     this.persons.clear();
   }
-
 }

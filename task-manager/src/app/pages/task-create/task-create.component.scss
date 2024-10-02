@@ -1,3 +1,4 @@
+/* src/app/pages/task-create/task-create.component.scss */
 .task-form {
   background-color: var(--card-background);
   border-radius: 8px;
@@ -27,6 +28,28 @@
   margin-bottom: 1rem;
 }
 
+.skills-section {
+  margin-top: 1rem;
+}
+
+.skill-item {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.add-button, .remove-button {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+}
+
+.add-button {
+  background-color: var(--secondary-color);
+}
+
+.remove-button {
+  background-color: var(--error-color);
+}
 
 .form-actions {
   display: flex;
@@ -36,4 +59,14 @@
 
 .reset-button {
   background-color: #95a5a6;
+}
+
+@media (min-width: 768px) {
+  .skill-item {
+    align-items: center;
+  }
+
+  .skill-item input {
+    flex: 1;
+  }
 }

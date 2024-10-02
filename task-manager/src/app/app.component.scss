@@ -82,20 +82,3 @@ body {
 }
 
 
-@media (min-width: 768px) {
-  .navbar .container {
-    max-width: 720px;
-  }
-}
-
-@media (min-width: 992px) {
-  .navbar .container {
-    max-width: 960px;
-  }
-}
-
-@media (min-width: 1200px) {
-  .navbar .container {
-    max-width: 1140px;
-  }
-}
